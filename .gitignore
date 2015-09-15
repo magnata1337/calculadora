@@ -1,12 +1,151 @@
-*.class
+package cal;
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+public class Lista {
+    private Node first;
+    private static class Node {
+        Node next;
+        float data;
+        Node( float newData ) {
+            data = newData;
+            next = null; 
+        }
+    } 
 
-# Package Files #
-*.jar
-*.war
-*.ear
+    public Lista() {
+        first = null;
+    }
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+    public float topo( ) {
+        float x = first.data;
+    	return x;
+    }
+    
+    public void push( float data ) {
+        Node p = new Node( data );
+        p.next = first;
+        first = p;
+    }
+      /*
+    public void print( )  {
+        printAux(first);
+    }
+  
+    private void printAux(Node n){
+        if (n == null) return;
+        System.out.println(n.data);
+        printAux(n.next);
+    }
+  */
+    public void swap(){
+        Node aux = first.next;
+        first.next = aux.next;
+        aux.next = first;
+        first = aux;
+    }
+    
+    public void dup(){
+        push(first.data);
+    }
+  
+    public float pop(){
+        Node aux = first;
+        first = aux.next;
+        return aux.data;
+    }
+    
+    public void soma(){
+        push(pop() + pop());
+    }
+    
+    public void subtracao(){
+        push(pop() - pop());
+    }
+    
+    public void mult(){
+        push(pop() * pop());
+    }
+    
+    public void div(){
+        push((pop() / pop()));
+    }
+    
+    public void sin(){
+        push((float) Math.sin(pop()));
+    }
+    
+    public void cos(){
+        push((float) Math.cos(pop()));
+    }
+    
+    public void atan(){
+    	push((float) Math.atan2(pop(),pop()));
+    }
+    
+    public int size(){
+    	Node aux = first;
+    	int cont = 0;
+    	while(aux!=null){
+    		aux = aux.next;
+    		cont++;
+    	}
+    	return cont;
+    }
+}
+---------------------------------------------------------------------------
+package cal;
+
+import java.io.BufferedReader; 
+import java.io.FileReader; 
+import java.io.IOException; 
+import java.util.Scanner; 
+import java.util.Scanner;
+import java.io.*;
+
+public class teste {
+    
+    public static void main(String[] args) {
+        Lista L = new Lista();
+        int tamanhoMax =0;
+        Scanner ler = new Scanner(System.in);
+        System.out.printf("Informe o nome de arquivo texto:\n"); 
+        String nome = ler.nextLine();
+        System.out.printf("\nConteúdo do arquivo texto:\n");
+        try {
+            FileReader arq = new FileReader(nome);
+            BufferedReader lerArq = new BufferedReader(arq);
+            String linha = lerArq.readLine(); // lê a primeira linha
+            while (linha != null) {
+                if ( linha.equals( "quit" ) ) System.exit(0);
+                if ( linha.matches( "[0-9]+" ) ) L.push( Integer.parseInt( linha ) );
+                if ( linha.equals( "swap" ) ) L.swap();
+                if ( linha.equals( "dup" ) ) L.dup();
+                if ( linha.equals( "pop" ) ) System.out.print(L.pop() + "\n");
+                if ( linha.equals( "+" ) ) L.soma();
+                if ( linha.equals( "-" ) ) L.subtracao();
+                if ( linha.equals( "*" ) ) L.mult();
+                if ( linha.equals( "/" ) ) L.div();
+                if ( linha.equals( "sin" ) ) L.sin();
+                if ( linha.equals( "cos" ) ) L.cos();
+                if ( linha.equals( "atan" ) ) L.atan();
+                 /*
+                 System.out.println("");
+                 L.print();
+                 System.out.println("");
+                 */
+                 int tam = L.size();
+                 if(L.size()>tamanhoMax) tamanhoMax = tam;
+                 
+                 linha = lerArq.readLine(); // lê da segunda até a última linha
+                }
+            	System.out.println("Tamanho máximo: " + tamanhoMax);
+            	System.out.println("Tamanho final: " + L.size());
+            	System.out.println("Valor no topo: " + L.topo());
+                arq.close();
+                 } catch (IOException e) {
+                            System.err.printf("Erro na abertura do arquivo: %s.\n",e.getMessage());
+    }
+    System.out.println();
+  }
+}
+
+
